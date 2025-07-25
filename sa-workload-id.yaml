@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    azure.workload.identity/client-id: a58e86e1-aeea-48ce-9d5d-dc7a0462d532
+  labels:
+    azure.workload.identity/use: "true"
+  name: blob-uploader
+  namespace: default

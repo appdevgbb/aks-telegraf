@@ -1,0 +1,103 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: blob-upload-test
+  namespace: default
+spec:
+  schedule: "*/30 * * * *"  # Every 30 minutes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            test-node: "high-load"  # Schedule on labeled node
+          containers:
+          - name: blob-uploader
+            image: mcr.microsoft.com/azure-cli:latest
+            command:
+            - /bin/bash
+            - -c
+            - |
+              echo "🔄 Starting 10GB blob upload test..."
+              
+              # Create a 10GB test file
+              echo "📁 Creating 10GB test file..."
+              dd if=/dev/zero of=/tmp/test-10gb.bin bs=1M count=10240
+              
+              # Upload to blob storage
+              echo "☁️ Uploading to Azure Blob Storage..."
+              az storage blob upload \
+                --account-name $STORAGE_ACCOUNT \
+                --container-name $CONTAINER_NAME \
+                --name "test-$(date +%s)-10gb.bin" \
+                --file /tmp/test-10gb.bin \
+                --auth-mode login
+              
+              echo "✅ Upload completed!"
+              
+              # Clean up
+              rm -f /tmp/test-10gb.bin
+            env:
+            - name: STORAGE_ACCOUNT
+              value: "your-storage-account"  # Replace with actual storage account
+            - name: CONTAINER_NAME
+              value: "test-uploads"
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "200m"
+              limits:
+                memory: "1Gi"
+                cpu: "500m"
+          restartPolicy: OnFailure
+          serviceAccountName: blob-uploader-sa
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: blob-upload-pod
+  namespace: default
+  labels:
+    app: blob-uploader
+spec:
+  nodeSelector:
+    dedicated: web-arm  # Schedule on labeled node
+  containers:
+  - name: blob-uploader
+    image: mcr.microsoft.com/azure-cli:latest
+    command:
+    - /bin/bash
+    - -c
+    - |
+      echo "🔄 Manual 10GB blob upload test..."
+      
+      # Create a 10GB test file
+      echo "📁 Creating 10GB test file..."
+      dd if=/dev/zero of=/tmp/test-10gb.bin bs=1M count=10240
+      
+      # Upload to blob storage
+      echo "☁️ Uploading to Azure Blob Storage..."
+      az storage blob upload \
+        --account-name $STORAGE_ACCOUNT \
+        --container-name $CONTAINER_NAME \
+        --name "manual-test-$(date +%s)-10gb.bin" \
+        --file /tmp/test-10gb.bin \
+        --auth-mode login
+      
+      echo "✅ Upload completed!"
+      echo "Sleeping for monitoring..."
+      sleep 300  # Keep pod alive for 5 minutes
+    env:
+    - name: STORAGE_ACCOUNT
+      value: "your-storage-account"  # Replace with actual storage account
+    - name: CONTAINER_NAME
+      value: "test-uploads"
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "200m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+  restartPolicy: Never
+  serviceAccountName: blob-uploader-sa

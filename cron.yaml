@@ -1,0 +1,67 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: upload-job
+  namespace: default
+spec:
+  schedule: "*/30 * * * *" # Every hour at minute 0
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            azure.workload.identity/use: "true"
+        spec:
+          serviceAccountName: blob-uploader
+          restartPolicy: Never
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - web-responder
+                  topologyKey: "kubernetes.io/hostname"
+          containers:
+            - name: uploader
+              image: mcr.microsoft.com/azure-cli
+              env:
+                - name: AZURE_CLIENT_ID
+                  value: a58e86e1-aeea-48ce-9d5d-dc7a0462d532
+                - name: AZURE_TENANT_ID
+                  value: de060cb6-6b37-489b-8a6e-c078c6dbeb09
+                - name: AZURE_FEDERATED_TOKEN_FILE
+                  value: /var/run/secrets/azure/tokens/azure-identity-token
+              volumeMounts:
+                - name: azure-identity-token
+                  mountPath: /var/run/secrets/azure/tokens
+                  readOnly: true
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  set -e
+                  echo "Creating test file..."
+                  dd if=/dev/urandom of=testfile10GB bs=1M count=10240
+                  FILENAME=testfile10GB
+                  echo "Logging in with workload identity..."
+                  az login --federated-token "$(cat $AZURE_FEDERATED_TOKEN_FILE)" --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID
+                  echo "Uploading to Azure Blob as $FILENAME..."
+                  az storage blob upload \
+                    --overwrite \
+                    --account-name dcasatimm \
+                    --container-name uploads \
+                    --name "$FILENAME" \
+                    --file testfile10GB \
+                    --auth-mode login
+          volumes:
+            - name: azure-identity-token
+              projected:
+                sources:
+                  - serviceAccountToken:
+                      audience: api://AzureADTokenExchange
+                      expirationSeconds: 3600
+                      path: azure-identity-token
+
