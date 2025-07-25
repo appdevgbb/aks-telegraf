@@ -1,0 +1,35 @@
+apiVersion: azmonitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: coredns-servicemonitor
+  namespace: kube-system
+  labels:
+    app: coredns
+spec:
+  selector:
+    matchLabels:
+      k8s-app: kube-dns
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+    scheme: http
+---
+# If the service doesn't have a metrics port, create one
+apiVersion: v1
+kind: Service
+metadata:
+  name: coredns-metrics
+  namespace: kube-system
+  labels:
+    app: coredns
+    k8s-app: kube-dns
+spec:
+  selector:
+    k8s-app: kube-dns
+  ports:
+  - name: metrics
+    port: 9153
+    targetPort: 9153
+    protocol: TCP
+  type: ClusterIP
