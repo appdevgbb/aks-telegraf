@@ -24,6 +24,8 @@ This solution uses a **cloud-native observability approach** with:
 └─────────────────┘
 ```
 
+![Grafana](assets/dashboard.png)
+
 ## Components
 
 This solution includes all necessary Kubernetes resources:
