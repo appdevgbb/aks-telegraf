@@ -58,7 +58,7 @@ This solution includes all necessary Kubernetes resources:
 
 If you don't have Azure Managed Prometheus and Grafana set up yet, follow this guide: [AKS Labs - Advanced Observability](https://azure-samples.github.io/aks-labs/docs/operations/observability-and-monitoring)
 
-![YouTube video](https://www.youtube.com/watch?v=Dc0TqbAkQX0)
+[![YouTube Video](http://img.youtube.com/vi/Dc0TqbAkQX0/0.jpg)](https://www.youtube.com/watch?v=Dc0TqbAkQX0)
 
 ### Verifying PodMonitor CRD Installation
 
