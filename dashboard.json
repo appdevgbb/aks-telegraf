@@ -1,4 +1,41 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3",
+      "label": "Managed_Prometheus_defaultazuremonitorworkspace-westus3",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.6.3"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -18,13 +55,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 78,
+  "id": null,
   "links": [],
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "defaultazuremonitorworkspace-westus3"
+        "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
       },
       "fieldConfig": {
         "defaults": {
@@ -146,7 +183,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "defaultazuremonitorworkspace-westus3"
+            "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
           },
           "editorMode": "code",
           "expr": "(sum(rate(network_interface_stats_rx_dropped[5m])) by (host) / sum(rate(network_interface_stats_rx_packets[5m])) by (host)) * 100",
@@ -162,7 +199,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "defaultazuremonitorworkspace-westus3"
+        "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
       },
       "description": "percentage of missed packets in relation to the overall received packets",
       "fieldConfig": {
@@ -245,7 +282,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "defaultazuremonitorworkspace-westus3"
+            "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
           },
           "editorMode": "code",
           "expr": "(sum(rate(network_interface_stats_rx_missed[5m])) by (host) / sum(rate(network_interface_stats_rx_packets[5m])) by (host)) * 100",
@@ -261,7 +298,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "defaultazuremonitorworkspace-westus3"
+        "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
       },
       "fieldConfig": {
         "defaults": {
@@ -342,7 +379,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "defaultazuremonitorworkspace-westus3"
+            "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
           },
           "editorMode": "code",
           "expr": "network_interface_stats_rx_dropped ",
@@ -358,7 +395,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "defaultazuremonitorworkspace-westus3"
+        "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
       },
       "fieldConfig": {
         "defaults": {
@@ -439,7 +476,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "defaultazuremonitorworkspace-westus3"
+            "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
           },
           "editorMode": "code",
           "expr": "network_interface_stats_rx_missed > 0",
@@ -455,7 +492,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "defaultazuremonitorworkspace-westus3"
+        "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
       },
       "fieldConfig": {
         "defaults": {
@@ -694,7 +731,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "defaultazuremonitorworkspace-westus3"
+            "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
           },
           "editorMode": "code",
           "exemplar": false,
@@ -712,7 +749,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "defaultazuremonitorworkspace-westus3"
+        "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
       },
       "fieldConfig": {
         "defaults": {
@@ -795,7 +832,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "defaultazuremonitorworkspace-westus3"
+            "uid": "${DS_MANAGED_PROMETHEUS_DEFAULTAZUREMONITORWORKSPACE-WESTUS3}"
           },
           "editorMode": "code",
           "expr": "sum(network_interface_stats_rx_packets) by (host)",
@@ -809,7 +846,6 @@
       "type": "timeseries"
     }
   ],
-  "preload": false,
   "refresh": "30s",
   "schemaVersion": 41,
   "tags": [],
@@ -824,5 +860,6 @@
   "timezone": "browser",
   "title": "RX Missed Percentage by Host",
   "uid": "eet0vywx39fy8b",
-  "version": 17
+  "version": 17,
+  "weekStart": ""
 }
