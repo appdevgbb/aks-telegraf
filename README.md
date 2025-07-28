@@ -486,6 +486,23 @@ When using Azure Managed Prometheus, note the API version:
 - **Azure Managed**: `azmonitoring.coreos.com/v1`
 - **Open Source**: `monitoring.coreos.com/v1`
 
+If you're not using the Azure Managed Prometheus:
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: telegraf-podmonitor
+spec:
+  selector:
+    matchLabels:
+      app: telegraf
+  podMetricsEndpoints:
+  - port: prometheus
+    interval: 30s
+    path: /metrics
+```
+
 ## Grafana Dashboards
 
 ### Sample PromQL Queries
