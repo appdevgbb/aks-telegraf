@@ -1,4 +1,4 @@
-# Collecting custom Network Interface Metrics on AKS Telegraf
+# Collecting Custom Network Interface Metrics on AKS with Telegraf
 
 This directory contains a Telegraf DaemonSet configuration that collects network interface statistics from AKS nodes and exposes them as Prometheus metrics for scraping by Azure Managed Prometheus.
 
